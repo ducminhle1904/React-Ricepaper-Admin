@@ -58,7 +58,7 @@ class ConfigStore {
 	switchLanguage = (lang: string) => {
 		this.locale = lang
 		localStorage.setItem('locale', lang)
-		i18n.changeLanguage(lang === 'zh_CN' ? 'zh' : 'en')
+		i18n.changeLanguage(lang === 'vi_VI' ? 'vi' : 'en')
 	}
 
 	// 切换风格

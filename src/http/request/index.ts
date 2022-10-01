@@ -3,18 +3,23 @@ import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } fro
 import ErrorHandle from './errorHandler'
 import { message } from 'antd'
 import { ResponseCode, ResponseKey } from './enum'
+import { getToken } from '@/utils/token'
 
 class NRequest {
 	protected instance: AxiosInstance | null = null
 
 	constructor(config: AxiosRequestConfig, prefix: string = '') {
 		const { baseURL, ...rest } = config
+		const token = getToken()
 
-		// 创建实例
 		this.instance = axios.create({
 			baseURL: prefix ? baseURL + prefix : baseURL,
 			timeout: 1000 * 20,
 			withCredentials: true,
+			headers: {
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`
+			},
 			...rest
 		})
 
@@ -25,9 +30,7 @@ class NRequest {
 	private requestInterceptor() {
 		this.instance!.interceptors.request.use(
 			(config: AxiosRequestConfig = {}) => {
-				// 设置请求头
 				if (config.headers) {
-					config.headers.Authorization = ''
 				}
 
 				return config
@@ -45,10 +48,8 @@ class NRequest {
 				return new Promise((resolve, reject) => {
 					const { status, data } = response
 
-					// 说明axios 都失败了
 					if (status !== 200) reject(data)
 
-					// 不是成功状态码
 					if (data[ResponseKey.CODE] !== ResponseCode.SUCCESS) {
 						message.error(data[ResponseKey.MESSAGE])
 
@@ -56,7 +57,6 @@ class NRequest {
 						reject(data)
 					}
 
-					// 成功返回
 					resolve(data)
 				})
 			},
@@ -91,13 +91,32 @@ class NRequest {
 		}
 		return this.request(option)
 	}
+
+	public put = <T>(url: string, data: any = {}, config: AxiosRequestConfig = {}): Promise<Result<T>> => {
+		const option: AxiosRequestConfig = {
+			url,
+			method: 'PUT',
+			data,
+			...config
+		}
+		return this.request(option)
+	}
+
+	public deletes = <T>(url: string, data: any = {}, config: AxiosRequestConfig = {}): Promise<Result<T>> => {
+		const option: AxiosRequestConfig = {
+			url,
+			method: 'DELETE',
+			data,
+			...config
+		}
+		return this.request(option)
+	}
 }
 
-const { get, post } = new NRequest({
-	// baseURL: import.meta.env.VITE_APP_API
-	baseURL: '/api'
+const { get, post, put, deletes } = new NRequest({
+	baseURL: 'https://ken-inventory-api.fly.dev'
 })
 
-export { get, post }
+export { get, post, put, deletes }
 
 export default NRequest

@@ -1,0 +1,8 @@
+.ant-card-head-title {
+    color: #868e96;
+}
+
+.ant-card {
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}

@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Form, Input, Button, Checkbox, Spin, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '@/store/index'
 import { observer } from 'mobx-react-lite'
-import logoOrigin from '@/assets/imgs/frame/logo_origin.png'
+import logoOrigin from '@/assets/imgs/frame/Ricepaperlogo.png'
+import { getToken, setToken } from '@/utils/token'
+import { getUserInfo, login } from '@/utils/apiCall'
+import request from '@/utils/axios'
 
 interface IFormValues {
 	username: string
@@ -81,12 +84,21 @@ const liStyle = {
 function Login() {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
-	const { basicStore, configStore } = useStore()
+	const { configStore } = useStore()
 	const [loading, setLoading] = useState(false)
-	// 登录
-	const onFinish = (values: IFormValues) => {
-		basicStore.login()
-		if (values.username == 'admin' && values.password == '123456') {
+
+	useEffect(() => {
+		const isToken = getToken()
+		if (isToken) navigate('/', { replace: true })
+	}, [])
+
+	const onFinish = async (values: IFormValues) => {
+		const data = await login(values.username, values.password)
+		const token = data?.response?.accessToken
+		if (token) {
+			setToken(token)
+			request.defaults.headers.common['Authorization'] = `Bearer ${token}`
+			const dataUser = await getUserInfo()
 			message.success(t('login.success'))
 			setLoading(true)
 			setTimeout(() => {
@@ -103,7 +115,7 @@ function Login() {
 			{/* Login Form */}
 			<div className="w-2/3 sm:w-2/5 xl:w-1/3 2xl:w-1/4 rounded-xl pt-5 px-5 bg-white">
 				<Spin spinning={loading}>
-					<div className="max-w-xs w-2/3 h-12 mb-8 mx-auto">
+					<div className="max-w-xs mb-8 mx-auto">
 						<img className="w-full h-full px-3 sm:px-10" src={logoOrigin} alt="" />
 					</div>
 					<Form

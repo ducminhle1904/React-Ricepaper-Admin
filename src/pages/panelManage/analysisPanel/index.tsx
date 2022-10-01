@@ -1,5 +1,7 @@
+import Stats from '@/components/stats'
+
 const AnalysisPanel = () => {
-	return <div>分析页面</div>
+	return <Stats />
 }
 
 export default AnalysisPanel

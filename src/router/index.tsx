@@ -33,13 +33,4 @@ function RouterConfig() {
 	)
 }
 
-if (new Date().getDay() === 4) {
-	console.error('KFC Crazy Thursday need 50$.')
-	console.log(`
-	⢠⠤⠴⠤⠤⠄  ⡢⡂⠒⢲⠒⠂  ⢰⣒⣒⣒⣲⠄  ⢴⠤⡦⢰⠒⡆  ⡖⢲⠒⢲⠒⡆
-	⣹⢸⢍⢉⢽⠄  ⡠⡇⠤⢼⠤⠄  ⢸⣒⣲⣒⣚⠄  ⢸⠭⡇⢸⣉⡇  ⡇⡸⠄⢸⣀⡇
-	⡜⡸⠔⠑⠜⡄  ⢄⠇⣀⣸⣀⡀  ⣑⣒⣺⣒⣒⡀  ⡩⠉⢍⡜⢀⡇  ⣏⣀⣀⣀⣀⡇
-	`)
-}
-
 export default RouterConfig

@@ -7,8 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { menus } from '@/components/menus/index'
 import { Item } from '@/components/menus/index.d'
-import logoMini from '@/assets/imgs/frame/logo_mini.png'
-import logoOrigin from '@/assets/imgs/frame/logo_origin.png'
+import logoOrigin from '@/assets/imgs/frame/Ricepaperlogo.png'
 
 interface IHeaderProps {
 	collapsed?: boolean
@@ -18,9 +17,9 @@ interface IHeaderProps {
 function SiderMenu({ collapsed, setVisible }: IHeaderProps) {
 	const { configStore } = useStore()
 	const { t } = useTranslation()
-	const navigate = useNavigate() // 路由跳转
+	const navigate = useNavigate()
 	const location = useLocation()
-	// 菜单列表
+
 	const [menuList]: Array<any> = useState(
 		menus.map((ele) => {
 			return {
@@ -39,7 +38,6 @@ function SiderMenu({ collapsed, setVisible }: IHeaderProps) {
 		})
 	)
 
-	// 解决刷新页面面包屑导航消失的问题
 	useEffect(() => {
 		let activeNode = JSON.parse(localStorage.getItem('activeItem') || '{}')
 		let parentNode = JSON.parse(localStorage.getItem('parentItem') || '{}')
@@ -56,30 +54,24 @@ function SiderMenu({ collapsed, setVisible }: IHeaderProps) {
 		}
 	}, [configStore, location.pathname, menuList])
 
-	// 返回首页
 	const backHome = () => {
 		configStore.crumbItem()
 		navigate('/', { replace: true })
 	}
 
-	// 点击菜单
 	const handleClickItem: MenuProps['onClick'] = (item) => {
 		let parentNode = item.keyPath[1]
 		let result = menuList.find((ele: Item) => ele.key === parentNode)
 		let activeNode = result?.children.find((ele: Item) => ele.key === item.key)
 		configStore.operateCrumbMenu(result)
 		configStore.switchMenuItem(activeNode)
-		if (setVisible !== undefined) setVisible(false) // 收起drawer菜单
+		if (setVisible !== undefined) setVisible(false)
 	}
 
 	return (
 		<>
-			<div className="h-16 text-center cursor-pointer overflow-hidden px-12 py-2 sm:px-6" onClick={backHome}>
-				<img
-					className={collapsed ? 'w-full h-full' : 'w-3/4 h-full m-auto'}
-					src={collapsed ? logoMini : logoOrigin}
-					alt=""
-				/>
+			<div className="text-center cursor-pointer overflow-hidden px-12 py-2 sm:px-6" onClick={backHome}>
+				<img className={collapsed ? 'w-full h-full' : 'w-3/4 h-full m-auto'} src={logoOrigin} alt="" />
 			</div>
 			<Menu
 				theme={configStore.themeStyle}
