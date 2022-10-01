@@ -33,6 +33,6 @@ export default defineConfig({
 		}
 	},
 	build: {
-		outDir: 'docs' // 打包后文件包名称
+		outDir: 'dist' // 打包后文件包名称
 	}
 })
