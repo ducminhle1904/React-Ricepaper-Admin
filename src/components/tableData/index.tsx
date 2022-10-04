@@ -1,11 +1,12 @@
-import { createProduct, deleteProduct, getAllProduct, updateProduct } from '@/utils/apiCall'
+import { createProduct, deleteProduct, getAllProduct, getProductQr, updateProduct } from '@/utils/apiCall'
 import { IconEye, IconPencil, IconTrashX } from '@tabler/icons'
-import { Button, Space, Table, Tooltip, Modal, Form, Input, Popover, message } from 'antd'
+import { Button, Space, Table, Tooltip, Modal, Form, Input, message, Image } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { FC, useEffect, useState } from 'react'
 import { isEmptyObject } from '@/helpers/common'
 import { generateCurrency } from '@/helpers/moneyHelper'
 import { RowData } from '@/models'
+import { Buffer } from 'buffer'
 
 const emptyData = {
 	id: '',
@@ -21,13 +22,9 @@ const TableData: FC = () => {
 	const [data, setData] = useState()
 	const [loading, setLoading] = useState(false)
 	const [open, setOpen] = useState(false)
-	const [openPopOver, setOpenPopOver] = useState(false)
 	const [initialValues, setInitialValues] = useState<RowData>(emptyData)
+	const [qrImage, setQrImage] = useState('')
 	const [form] = Form.useForm()
-
-	const handleOpenChange = (newOpen: boolean) => {
-		setOpenPopOver(newOpen)
-	}
 
 	const columns: ColumnsType<RowData> = [
 		{
@@ -62,17 +59,10 @@ const TableData: FC = () => {
 			render: (_, record) => (
 				<Space size="middle">
 					<Tooltip title="Sửa sản phẩm">
-						<Button
-							className="flex items-center justify-center"
-							type="primary"
-							icon={<IconPencil />}
-							onClick={() => editProduct(record)}
-							key={record.id}
-						/>
+						<Button type="primary" icon={<IconPencil />} onClick={() => editProduct(record)} key={record.id} />
 					</Tooltip>
 					<Tooltip title="Xóa sản phẩm">
 						<Button
-							className="flex items-center justify-center"
 							type="primary"
 							icon={<IconTrashX />}
 							danger
@@ -82,20 +72,34 @@ const TableData: FC = () => {
 						/>
 					</Tooltip>
 					<Tooltip title="Xem mã QR">
-						<Popover
-							content={<p onClick={() => setOpenPopOver(false)}>Close</p>}
-							title="Title"
-							trigger="click"
-							open={openPopOver}
-							onOpenChange={handleOpenChange}
-						>
-							<Button className="flex items-center justify-center" type="text" icon={<IconEye />} key={record.id} />
-						</Popover>
+						<Button
+							className="flex items-center justify-center"
+							type="text"
+							icon={<IconEye />}
+							key={record.id}
+							onClick={() => getQR(record)}
+						/>
 					</Tooltip>
 				</Space>
 			)
 		}
 	]
+
+	const getQR = async (product: RowData) => {
+		const data = await getProductQr(product.id)
+		Modal.info({
+			title: `Mã QR sản phẩm ${product.productName}`,
+			content: <Image src={`data:image/jpeg;base64,${data.response}`} />,
+			onOk() {
+				const a = document.createElement('a')
+				a.href = `data:image/png;base64,${data.response}`
+				a.download = `${product.productName}.png`
+				a.click()
+			},
+			closable: true,
+			okText: 'Tải xuống mã QR'
+		})
+	}
 
 	useEffect(() => {
 		form.setFieldsValue(initialValues)

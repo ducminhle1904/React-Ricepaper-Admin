@@ -6,7 +6,7 @@ import { Layout, Drawer } from 'antd'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 import SiderMenu from './sider/index'
 import HeaderNav from './header/index'
-import logoMini from '@/assets/imgs/frame/logo_mini.png'
+import logoMini from '@/assets/imgs/frame/Ricepaperlogo.png'
 const { Header, Content, Sider } = Layout
 
 function LayoutConfig() {
@@ -74,13 +74,6 @@ function LayoutConfig() {
 			)}
 			<Layout>
 				<Header className="flex items-center !bg-white shadow-box !p-0">
-					{width < 650 ? (
-						<span className="w-24 h-full text-center cursor-pointer px-5 py-2" onClick={backHome}>
-							<img className="w-full h-full" src={logoMini} alt="" />
-						</span>
-					) : (
-						''
-					)}
 					{React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
 						className:
 							'!flex items-center h-full py-0 px-6 cursor-pointer transition-color duration-300 text-gray-500 mr-2.5 text-base hover:bg-gray-100',

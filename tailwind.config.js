@@ -28,5 +28,8 @@ module.exports = {
 			square: 'square 30s infinite'
 		}
 	},
-	plugins: []
+	plugins: [],
+	corePlugins: {
+		preflight: false // <== disable this!
+	}
 }

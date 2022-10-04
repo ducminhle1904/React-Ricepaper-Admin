@@ -1,9 +1,9 @@
 import { lazy } from 'react'
 export const list = [
 	{
-		path: '/userList', // 用户列表
-		name: 'userList',
-		component: lazy(() => import('@/pages/listManage/userList'))
+		path: '/productList', // 用户列表
+		name: 'productList',
+		component: lazy(() => import('@/pages/listManage/productList'))
 	},
 	{
 		path: '/diaryList', // 日记列表

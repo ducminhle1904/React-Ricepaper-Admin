@@ -60,11 +60,7 @@ export const deleteProduct = async (id: string) => {
 
 export const getProductQr = async (id: string) => {
 	return await request
-		.post('/get_qr', {
-			params: {
-				id
-			}
-		})
+		.post(`/get_qr_base64/${id}`)
 		.then((res) => res.data)
 		.catch((err) => err)
 }

@@ -208,3 +208,13 @@ body {
 .ant-zoom-big-leave-start .ant-menu {
 	display: none;
 }
+
+.ant-btn-icon-only {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ant-modal-confirm-body>.anticon+.ant-modal-confirm-title+.ant-modal-confirm-content {
+	margin-left: 0 !important;
+}

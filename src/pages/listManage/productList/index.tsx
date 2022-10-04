@@ -1,6 +1,7 @@
 import TableData from '@/components/tableData'
+import { observer } from 'mobx-react-lite'
 
-function UserList() {
+function ProductList() {
 	const styles: any = {
 		overflowX: 'auto'
 	}
@@ -11,4 +12,4 @@ function UserList() {
 	)
 }
 
-export default UserList
+export default observer(ProductList)
